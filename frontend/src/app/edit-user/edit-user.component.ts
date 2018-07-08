@@ -1,4 +1,11 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {first} from "rxjs/operators";
+
+import {UserService} from "../user.service";
+import {User} from "../user.model";
+
 
 @Component({
   selector: 'app-edit-user',
@@ -7,9 +14,41 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EditUserComponent implements OnInit {
 
-  constructor() { }
+  user: User;
+  editForm: FormGroup;
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router, 
+    private route: ActivatedRoute,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
+  	//https://blog.thoughtram.io/angular/2016/10/10/resolving-route-data-in-angular-2.html
+  	let userId = this.route.snapshot.paramMap.get('id');
+    
+    this.editForm = this.formBuilder.group({
+      id: [],
+      email: ['', Validators.required],
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required]
+    });
+    this.userService.getUserById(+userId)
+      .subscribe( data => {
+        this.editForm.setValue(data);
+      });
+  }
+
+  onSubmit() {
+    this.userService.updateUser(this.editForm.value)
+      .pipe(first())
+      .subscribe(
+        data => {
+          this.router.navigate(['list-user']);
+        },
+        error => {
+          alert(error);
+        });
   }
 
 }

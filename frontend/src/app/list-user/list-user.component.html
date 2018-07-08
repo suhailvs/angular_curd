@@ -1,3 +1,14 @@
-<p>
-  list-user works!
-</p>
+<div class="col-md-6">
+  <div class="card">
+    <div class="card-header">
+      Users <button class="btn btn-success btn-sm" (click)="addUser()"> Add User</button>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" *ngFor="let user of users">
+        <strong>{{user.firstName}} {{user.lastName}}</strong> {{user.email}} - 
+        <a class="btn btn-light btn-sm" [routerLink]="['/edit-user', user.id]"> Edit </a> |
+        <a class="btn btn-warning btn-sm" (click)="deleteUser(user)"> Delete</a>
+      </li>
+    </ul>
+  </div>
+</div>

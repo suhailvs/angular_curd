@@ -1,5 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import {ReactiveFormsModule} from "@angular/forms";
+import {HttpClientModule} from "@angular/common/http";
+
+import {routing} from "./app.routing";
+import {UserService} from "./user.service";
 
 import { AppComponent } from './app.component';
 import { AddUserComponent } from './add-user/add-user.component';
@@ -14,7 +19,10 @@ import { ListUserComponent } from './list-user/list-user.component';
     ListUserComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    routing,
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]
