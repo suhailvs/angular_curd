@@ -10,28 +10,37 @@ import {Router} from "@angular/router";
   styleUrls: ['./add-user.component.css']
 })
 export class AddUserComponent implements OnInit {
+  submitted = false;
+  loading = false;
+  addForm: FormGroup;
+  addErrors: string;
 
   constructor(private formBuilder: FormBuilder,private router: Router, private userService: UserService) { }
-
-  addForm: FormGroup;
 
   ngOnInit() {
 
     this.addForm = this.formBuilder.group({
       id: [],
       email: ['', Validators.required],
-      firstName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(6)]],
       lastName: ['', Validators.required]
     });
 
   }
 
-  onSubmit() {
-    if (this.addForm.invalid) return;
+  get f() { return this.addForm.controls; }
 
+  onSubmit() {
+    this.submitted = true;
+    if (this.addForm.invalid) return;
+    this.loading = true;
   	this.userService.createUser(this.addForm.value)
     .subscribe( data => {
       this.router.navigate(['list-user']);
+    },
+    error => {
+      this.addErrors = error;
+      this.loading = false;
     });
   }
 
