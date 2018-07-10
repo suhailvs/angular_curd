@@ -13,7 +13,7 @@ import {User} from "../user.model";
   styleUrls: ['./edit-user.component.css']
 })
 export class EditUserComponent implements OnInit {
-
+  loading = true;
   user: User;
   editForm: FormGroup;
   constructor(
@@ -35,19 +35,23 @@ export class EditUserComponent implements OnInit {
     });
     this.userService.getUserById(+userId)
       .subscribe( data => {
-        this.editForm.setValue(data);
+        this.editForm.setValue(data);        
+        this.loading=false;
       });
   }
 
   onSubmit() {
+    this.loading = true;
     this.userService.updateUser(this.editForm.value)
       .pipe(first())
       .subscribe(
         data => {
           this.router.navigate(['list-user']);
+          this.loading = false;
         },
         error => {
           alert(error);
+          this.loading = false;
         });
   }
 

@@ -9,7 +9,7 @@ import {User} from "../user.model";
   styleUrls: ['./list-user.component.css']
 })
 export class ListUserComponent implements OnInit {
-
+  loading = true;
   users: User[];
 
   constructor(
@@ -21,19 +21,17 @@ export class ListUserComponent implements OnInit {
     this.userService.getUsers()
       .subscribe( data => {
         this.users = data;
+        this.loading = false;
       });
   }
 
   deleteUser(user: User): void {
+    this.loading = true;
     this.userService.deleteUser(user.id)
       .subscribe( data => {
         this.users = this.users.filter(u => u !== user);
+        this.loading = false;
       })
-  };
-
-  editUser(user: User): void {
-    console.log(user);
-    this.router.navigate(['edit-user']);
   };
 
   addUser(): void {
