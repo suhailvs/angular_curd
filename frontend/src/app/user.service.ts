@@ -8,7 +8,7 @@ import {User} from "./user.model";
 export class UserService {
 
   constructor(private http: HttpClient) { }
-  baseUrl: string = 'http://localhost:8080/users/';
+  baseUrl: string = 'http://angularcurd.herokuapp.com/users/';
 
   getUsers() {
     return this.http.get<User[]>(this.baseUrl);
